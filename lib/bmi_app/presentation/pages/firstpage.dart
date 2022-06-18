@@ -1,4 +1,7 @@
+import 'package:bmi_app/bmi_app/data/models/bmi_model.dart';
+import 'package:bmi_app/bmi_app/presentation/pages/secondpage.dart';
 import 'package:flutter/material.dart';
+import 'package:general/general.dart';
 
 class FirstPage extends StatefulWidget {
   const FirstPage({Key? key}) : super(key: key);
@@ -8,6 +11,7 @@ class FirstPage extends StatefulWidget {
 }
 
 class _FirstPageState extends State<FirstPage> {
+  List<BmiModel> bmis = [];
   final heights = TextEditingController();
   final weights = TextEditingController();
   String bmiOutput = '';
@@ -17,12 +21,39 @@ class _FirstPageState extends State<FirstPage> {
         int.parse(weights.text) /
         int.parse(heights.text));
     bmiOutput = total.toStringAsFixed(2);
+    final bmiModel = BmiModel(bmi: bmiOutput);
+    bmis.add(bmiModel);
   }
+
+  final wKEy = GlobalKey<FormState>();
+  final hKEy = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: Column(children: [
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SecondPage(output: bmis),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.history),
+              color: Colors.blueGrey,
+              iconSize: 35,
+            ),
+          )
+        ],
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: Column(children: [
         Container(
           padding: const EdgeInsets.all(10),
           margin: const EdgeInsets.all(20),
@@ -35,28 +66,55 @@ class _FirstPageState extends State<FirstPage> {
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600)),
               const SizedBox(height: 30),
               // height text field
-              TextFormField(
-                  controller: heights, keyboardType: TextInputType.number),
-              const SizedBox(height: 30),
-              // weight text
-              TextFormField(
+              CustomTextField(
+                'Height',
+                controller: heights,
+                keyboard: TextInputType.number,
                 validator: (value) {
-                  if (value! == 1) {
-                    return 'error';
+                  if (value!.length > 3) {
+                    return 'input must be 3 or lower';
                   } else {
                     return null;
                   }
                 },
+                formKey: hKEy,
+              ),
+              const SizedBox(height: 30),
+              // weight text
+              CustomTextField(
+                'weght',
                 controller: weights,
-                keyboardType: TextInputType.number,
+                keyboard: TextInputType.number,
+                validator: (value) {
+                  if (value!.length > 3) {
+                    return 'input must be 3 or lower';
+                  } else {
+                    return null;
+                  }
+                },
+                formKey: wKEy,
               ),
               const SizedBox(height: 30),
               // calculate button
               InkWell(
                 onTap: () {
-                  setState(() {
-                    calculate();
-                  });
+                  if (wKEy.currentState!.validate() &&
+                      hKEy.currentState!.validate()) {
+                    setState(() {
+                      calculate();
+                    });
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        duration: Duration(milliseconds: 300),
+                        backgroundColor: Colors.white,
+                        content: Text(
+                          'Invalid Input',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    );
+                  }
                 },
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),

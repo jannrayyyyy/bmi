@@ -1,4 +1,4 @@
-import 'package:bmi_app/bmi_app/presentation/pages/homepage.dart';
+import 'package:bmi_app/bmi_app/presentation/pages/firstpage.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       title: 'BMI',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blueGrey),
-      home: HomePage(),
+      home: FirstPage(),
     );
   }
 }
