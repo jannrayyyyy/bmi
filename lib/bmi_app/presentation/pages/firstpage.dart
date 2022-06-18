@@ -1,5 +1,6 @@
 import 'package:bmi_app/bmi_app/data/models/bmi_model.dart';
 import 'package:bmi_app/bmi_app/presentation/pages/secondpage.dart';
+import 'package:bmi_app/bmi_app/presentation/widgets/bmi_range_container.dart';
 import 'package:flutter/material.dart';
 import 'package:general/general.dart';
 
@@ -53,7 +54,7 @@ class _FirstPageState extends State<FirstPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: Column(children: [
+      body: ListView(children: [
         Container(
           padding: const EdgeInsets.all(10),
           margin: const EdgeInsets.all(20),
@@ -82,7 +83,7 @@ class _FirstPageState extends State<FirstPage> {
               const SizedBox(height: 30),
               // weight text
               CustomTextField(
-                'weght',
+                'Weight',
                 controller: weights,
                 keyboard: TextInputType.number,
                 validator: (value) {
@@ -102,6 +103,8 @@ class _FirstPageState extends State<FirstPage> {
                       hKEy.currentState!.validate()) {
                     setState(() {
                       calculate();
+                      heights.clear();
+                      weights.clear();
                     });
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -129,6 +132,7 @@ class _FirstPageState extends State<FirstPage> {
                 ),
               ),
               const SizedBox(height: 70),
+
               //display button
               bmiOutput.isEmpty
                   ? const SizedBox.shrink()
@@ -139,6 +143,8 @@ class _FirstPageState extends State<FirstPage> {
                           borderRadius: BorderRadius.circular(10),
                           color: colorCondition(double.parse(bmiOutput))),
                       child: Text(bmiOutput)),
+              const SizedBox(height: 40),
+              const BmiRangeContainer(),
             ],
           ),
         ),
@@ -148,13 +154,12 @@ class _FirstPageState extends State<FirstPage> {
 
   Color colorCondition(double number) {
     if (number <= 18.5) {
-      // lightblue - underweight
       return Colors.lightBlue;
-    } else if (number <= 18.5) {
-      return Colors.green;
     } else if (number <= 24.9) {
-      return Colors.yellow;
+      return Colors.green;
     } else if (number <= 29.9) {
+      return Colors.yellow;
+    } else if (number <= 34.9) {
       return Colors.red;
     } else {
       return Colors.purpleAccent;

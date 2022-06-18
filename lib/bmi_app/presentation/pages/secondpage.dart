@@ -17,12 +17,46 @@ class _SecondPageState extends State<SecondPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: widget.output.map((e) {
-          return Text(e.bmi);
-        }).toList(),
-      ),
+      body: ListView(children: [
+        const SizedBox(height: 40),
+        Container(
+          alignment: Alignment.center,
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'HISTORY',
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+        ),
+        Column(
+          children: widget.output.map((e) {
+            return Container(
+                width: double.infinity,
+                color: colorCondition(double.parse(e.bmi)),
+                margin: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(20),
+                child: Text(e.bmi));
+          }).toList(),
+        ),
+      ]),
     );
+  }
+
+  Color colorCondition(double number) {
+    if (number <= 18.5) {
+      return Colors.lightBlue;
+    } else if (number <= 24.9) {
+      return Colors.green;
+    } else if (number <= 29.9) {
+      return Colors.yellow;
+    } else if (number <= 34.9) {
+      return Colors.red;
+    } else {
+      return Colors.purpleAccent;
+    }
   }
 }
