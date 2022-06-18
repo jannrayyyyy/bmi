@@ -1,3 +1,4 @@
+import 'package:bmi_app/bmi_app/core/utils/bmi_filter.dart';
 import 'package:bmi_app/bmi_app/data/models/bmi_model.dart';
 import 'package:bmi_app/bmi_app/presentation/pages/secondpage.dart';
 import 'package:bmi_app/bmi_app/presentation/widgets/bmi_range_container.dart';
@@ -150,19 +151,5 @@ class _FirstPageState extends State<FirstPage> {
         ),
       ]),
     );
-  }
-
-  Color colorCondition(double number) {
-    if (number <= 18.5) {
-      return Colors.lightBlue;
-    } else if (number <= 24.9) {
-      return Colors.green;
-    } else if (number <= 29.9) {
-      return Colors.yellow;
-    } else if (number <= 34.9) {
-      return Colors.red;
-    } else {
-      return Colors.purpleAccent;
-    }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:bmi_app/bmi_app/core/utils/bmi_filter.dart';
 import 'package:bmi_app/bmi_app/data/models/bmi_model.dart';
 import 'package:flutter/material.dart';
 
@@ -17,46 +18,51 @@ class _SecondPageState extends State<SecondPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(children: [
-        const SizedBox(height: 40),
-        Container(
-          alignment: Alignment.center,
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              'HISTORY',
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.w800,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        iconTheme: const IconThemeData(color: Colors.black),
+        elevation: 0,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              alignment: Alignment.center,
+              child: const Text(
+                'HISTORY',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black),
               ),
             ),
-          ),
+            InkWell(
+                onTap: () {
+                  setState(() {
+                    widget.output.clear();
+                  });
+                },
+                child: const Icon(Icons.delete))
+          ],
         ),
+      ),
+      body: ListView(children: [
         Column(
           children: widget.output.map((e) {
             return Container(
                 width: double.infinity,
-                color: colorCondition(double.parse(e.bmi)),
+                color: Colors.grey[200],
                 margin: const EdgeInsets.all(10),
                 padding: const EdgeInsets.all(20),
-                child: Text(e.bmi));
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    textCondition(double.parse(e.bmi)),
+                    Text(e.bmi),
+                  ],
+                ));
           }).toList(),
         ),
       ]),
     );
-  }
-
-  Color colorCondition(double number) {
-    if (number <= 18.5) {
-      return Colors.lightBlue;
-    } else if (number <= 24.9) {
-      return Colors.green;
-    } else if (number <= 29.9) {
-      return Colors.yellow;
-    } else if (number <= 34.9) {
-      return Colors.red;
-    } else {
-      return Colors.purpleAccent;
-    }
   }
 }
